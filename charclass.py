@@ -2,10 +2,11 @@ import pygame
 
 class char(pygame.sprite.Sprite):
     "This class is the box"
-    def __init__(self, name, color):
+    def __init__(self, name, color, health, alive):
         super().__init__()
         self.name = name
-
+        self.health = 100
+        self.alive = True
         self.image = pygame.Surface([4,5])
         self.image.fill(color)
 
@@ -19,8 +20,15 @@ class char(pygame.sprite.Sprite):
         self.lead_y_down = 0'''
         self.sp = 2
         #pygame.draw.rect(gameDisplay, red, [self.lead_x,self.lead_y, 10,10])
-
-
+    '''
+    def condition():
+        while running=True: #make variable called running that stays True until game ends
+            #check if any collisions are happening
+            if(collision=True):
+                x='''pgspritecollideany.damage''' #returns collided sprite, in this case a bullet, and takes the damage attribute of bullet
+                self.health=self.health-x                        
+    '''
+    
     def left(self):
         self.rect.x -= self.sp
 
