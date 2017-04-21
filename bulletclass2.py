@@ -9,7 +9,7 @@ class Bullet2(pygame.sprite.Sprite):
         
     def __init__(self, ai, color, damage):
         super().__init__()
-        self.color = red
+        #self.color = red
         self.damage = 50
         self.image = pygame.Surface([4,5])
         self.image.fill(color)
