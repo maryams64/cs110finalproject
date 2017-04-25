@@ -34,8 +34,8 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-        self.rect.x = ai.rect.x
-        self.rect.y = ai.rect.y
+        self.rect.x = (ai.rect.x + (ai.w/2))
+        self.rect.y = ai.h
         
     def getCoordinates(self):
         return([self.rect.x,self.rect.y])
