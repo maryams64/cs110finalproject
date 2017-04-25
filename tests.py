@@ -13,10 +13,9 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
-screen_width = 700
-screen_height = 400
+s = screenclass.background('''insert img file name here''', 700, 400)
  
-screen = pygame.display.set_mode([screen_width,screen_height])
+screen = pygame.display.set_mode(s.size)
 
 
 pygame.display.update()
@@ -68,6 +67,7 @@ while not done:
 
     all_sprites_list.update()
     screen.fill(WHITE)
+    screen.blit(s.image, s.rect)
     all_sprites_list.draw(screen)
     pygame.display.update()
 
