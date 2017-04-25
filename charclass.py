@@ -2,13 +2,13 @@ import pygame
 
 class char(pygame.sprite.Sprite):
     "This class is the box"
-    def __init__(self, name, color, health, alive):
+    def __init__(self, name, image, health, alive):
         super().__init__()
         self.name = name
         self.health = 100
         self.alive = True
-        self.image = pygame.Surface([4,5])
-        self.image.fill(color)
+        self.image = pygame.image.load(os.path.join('images', image))
+        self.image = pygame.transform.scale(self.image, (50, 50))
 
         self.rect = self.image.get_rect()
         
