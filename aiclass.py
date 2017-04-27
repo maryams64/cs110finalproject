@@ -1,13 +1,10 @@
 import pygame
 
 class combatAi(pygame.sprite.Sprite):
-    def __init__(self, image):
+    def __init__(self):
         super().__init__()
                
-        self.image = pygame.image.load(os.path.join('images', image))
-        self.w = 50
-        self.h = 50
-        self.image = pygame.transform.scale(self.image, (self.w, self.h))
+        self.image = pygame.Surface([4,5])
     
         self.rect = self.image.get_rect()
 
