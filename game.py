@@ -45,7 +45,8 @@ while not gameExit:
             if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                 lead_y_up = 0
                 lead_y_down = 0
-
+    #while gameExit:
+        #if pygame.sprite.spritecollideany(sprite, group, collided = None) != None:            
     if lead_x >= gameWidth - 50:
         lead_x_up = 0
     if lead_x <= 50:
