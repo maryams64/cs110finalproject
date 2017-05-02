@@ -1,8 +1,11 @@
 import pygame
-import charclass
+import charclassgui
 import bulletclass2
 import aiclass
+import screenclass
 import random
+import levels
+import sys
 
 
 WHITE = (255, 255, 255)
@@ -13,89 +16,264 @@ GREEN = (0, 128, 0)
 PURPLE = (128, 0, 128)
 BROWN = (160, 82, 45)
 totalBulletCount = 0
-tickNum = 0
-level = 1
 
 easyColorList = [BLUE, BLUE, BLUE, BLUE, RED, RED, RED, GREEN, GREEN, PURPLE, BLACK, BROWN]
 harderColorList = [BLUE, RED, RED, GREEN, PURPLE, PURPLE, PURPLE, BLACK, BLACK, BROWN]
 veryHardColorList = [BLUE, RED, GREEN, PURPLE, PURPLE, BLACK, BLACK, BLACK, BROWN]
 hardestColorList = [BLACK, BROWN, BROWN, BROWN, BROWN]
 
+def process(char):
+          keys = pygame.key.get_pressed()
+          if keys[pygame.K_LEFT]:
+                  char.left()
+                  print('Left: ' +str(char.getCoordinates()))
+          elif keys[pygame.K_RIGHT]:
+                  char.right()
+                  print('Right: ' +str(char.getCoordinates()))
+          elif keys[pygame.K_UP]:
+                  char.up()
+                  print('Up: ' +str(char.getCoordinates()))
+          elif keys[pygame.K_DOWN]:
+                  char.down()
+                  print('Down: ' + str(char.getCoordinates()))
 
-pygame.init()
+# def makeBullet(num, ai, lv):
+#         count = 0
+#         while count < num:
+#             if(count > 200):
+#                     lv.bullet_list.add(bulletclass2.Bullet(ai, random.choice(hardestColorList)))
+#                     lv.all_sprites_list.add(bulletclass2.Bullet(ai, random.choice(hardestColorList)))
+#                     num += 1
+#                     lv.bullet_list.update()
+#             elif(200 > count > 150):
+#                     lv.bullet_list.add(bulletclass2.Bullet(ai, random.choice(veryHardColorList)))
+#                     lv.all_sprites_list.add(bulletclass2.Bullet(ai, random.choice(veryHardColorList)))
+#                     num += 1
+#                     lv.bullet_list.update()
+#             elif(150 > count > 70):
+#                     lv.bullet_list.add(bulletclass2.Bullet(ai, random.choice(harderColorList)))
+#                     lv.all_sprites_list.add(bulletclass2.Bullet(ai, random.choice(harderColorList)))
+#                     num += 1
+#                     lv.bullet_list.update()
+#             else:
+#                     lv.bullet_list.add(bulletclass2.Bullet(ai, random.choice(easyColorList)))
+#                     lv.all_sprites_list.add(bulletclass2.Bullet(ai, random.choice(easyColorList)))
+#                     num += 1
+#                     lv.bullet_list.update()
+        #return lv.bullet_list
 
-clock = pygame.time.Clock()
 
-screen_width = 700
-screen_height = 400
- 
-screen = pygame.display.set_mode([screen_width,screen_height])
+#print('Health: ' + str(stuf.health))
+
+def playagain(lvlist, lvnum):
+    pygame.init()
+
+    clock = pygame.time.Clock()
 
 
-pygame.display.update()
+    screen_x = 1200
+    screen_y = 600
 
-all_sprites_list = pygame.sprite.Group()
-bullet_list = pygame.sprite.Group()
+    size = (screen_x, screen_y)
+    screen = pygame.display.set_mode(size)
 
-stuf = charclass.char('bynn', RED)
-all_sprites_list.add(stuf)
+    pygame.display.update()
 
-herald = aiclass.combatAi()
-all_sprites_list.add(herald)
-print('Herald Coordinates: ' +str(herald.getCoordinates()))
+    '''all_sprites_list = pygame.sprite.Group()
+    bullet_list = pygame.sprite.Group()'''
 
-done = False
+    myfont = pygame.font.SysFont('Arial Black', 16)
 
-def makeBullet(count):
-        if(count > 200):
-                bullet = bulletclass2.Bullet(herald, random.choice(hardestColorList), stuf.rect.x, stuf.rect.y)
-        elif(count > 150):
-                bullet = bulletclass2.Bullet(herald, random.choice(veryHardColorList), stuf.rect.x, stuf.rect.y)
-        elif(count > 70):
-                bullet = bulletclass2.Bullet(herald, random.choice(harderColorList), stuf.rect.x, stuf.rect.y)
-        else:
-                bullet = bulletclass2.Bullet(herald, random.choice(easyColorList), stuf.rect.x, stuf.rect.y)
-        return bullet
+    stuf = charclassgui.char('moore', 'moore.png')
+    bean = aiclass.combatAi('bean.png')
+    test = aiclass.combatAi('basketball.png')
 
-print(stuf.health)
-while not done:
-        if(tickNum % 10 == 0):
-                bullet = makeBullet(totalBulletCount)
-                totalBulletCount += 1
-                bullet_list.add(bullet)
-                all_sprites_list.add(bullet)
-                
-        for event in pygame.event.get():
-            keys = pygame.key.get_pressed()
-            if event.type == pygame.QUIT:
-                done = True
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    stuf.left()
-                elif event.key == pygame.K_RIGHT:
-                    stuf.right()
-                elif event.key == pygame.K_UP:
-                    stuf.up()
-                elif event.key == pygame.K_DOWN:
-                    stuf.down()
-                
-        for bul in bullet_list:
-                if(pygame.sprite.collide_rect(bul, stuf)):
-                        stuf.health -= bul.damage
-                        print("Health:", stuf.health)
-                        all_sprites_list.remove(bul)
-                        bullet_list.remove(bul)
-                        if(stuf.health <= 0):
-                                all_sprites_list.remove(stuf)
-                                print("you suck")
+    level_list = lvlist
 
-        all_sprites_list.update()
-        screen.fill(WHITE) 
-        all_sprites_list.draw(screen)
-        pygame.display.update()
-        clock.tick(30)
-        tickNum += level
-        
-pygame.quit()
+    current_level_no = lvnum
+    current_level = level_list[current_level_no]
 
+    done = False
+    game_over = False
+    delay = 250
+
+    max_bul = 100
+    count = 0
+
+    current_level.player.health = 100
+
+    while not done:
+            now = pygame.time.get_ticks()
+            for event in pygame.event.get():
+                  keys = pygame.key.get_pressed()
+                  if event.type == pygame.QUIT:
+                            done = True
+            while count < max_bul:
+                var = bulletclass2.Bullet(current_level.ai,RED)
+                current_level.all_sprites_list.add(var)
+                current_level.bullet_list.add(var)
+                count += 1
+                current_level.bullet_list.update()
+
+
+            for i in current_level.char_list:
+                  i.coll(current_level.bullet_list)
+                  scoretext = myfont.render("Health: "+str(current_level.player.health), 1, (BLACK))
+                  if(stuf.health <= 0):
+                          current_level.all_sprites_list.remove(current_level.player)
+                          game_over = True
+
+            if game_over:
+                  read =myfont.render("GAME OVER! Try again!", 1, BLACK)
+                  screen.blit(read, [(screen_x/2), (screen_y/2)])
+                  screen.blit(current_level.background, size)
+                  playagain(level_list, current_level_no)
+
+            process(stuf)
+            current_level.all_sprites_list.update()
+            current_level.draw(screen, size)
+            screen.blit(scoretext, (100, 100))
+
+            pygame.display.flip()
+
+            clock.tick(60)
+
+    pygame.quit()
+
+def main():
+  pygame.init()
+
+  clock = pygame.time.Clock()
+
+
+  screen_x = 1200
+  screen_y = 600
+
+  size = (screen_x, screen_y)
+  screen = pygame.display.set_mode(size)
+
+  pygame.display.update()
+
+  '''all_sprites_list = pygame.sprite.Group()
+  bullet_list = pygame.sprite.Group()'''
+
+  myfont = pygame.font.SysFont('Arial Black', 16)
+
+  stuf = charclassgui.char('moore', 'moore.png')
+  bean = aiclass.combatAi('bean.png')
+  test = aiclass.combatAi('basketball.png')
+
+
+  level_list = []
+  pls = levels.Level1(stuf, bean, 'patio.jpg')
+  level_list.append(pls)
+
+  level_list.append(levels.Level2(stuf, test, 'arch.jpg'))
+
+  level_list[0].all_sprites_list.add(stuf)
+  level_list[0].char_list.add(stuf)
+  level_list[0].all_sprites_list.add(bean)
+  level_list[1].all_sprites_list.add(test)
+  level_list[1].all_sprites_list.add(stuf)
+  level_list[1].char_list.add(stuf)
+
+  current_level_no = 0
+  current_level = level_list[current_level_no]
+
+  done = False
+  game_over = False
+  delay = 250
+
+  max_bul = 100
+  count = 0
+
+
+
+  print(current_level.bullet_list)
+  while not done:
+          now = pygame.time.get_ticks()
+          for event in pygame.event.get():
+                keys = pygame.key.get_pressed()
+                if event.type == pygame.QUIT:
+                          done = True
+          while count < max_bul:
+              var = bulletclass2.Bullet(current_level.ai,RED)
+              current_level.all_sprites_list.add(var)
+              current_level.bullet_list.add(var)
+              count += 1
+              current_level.bullet_list.update()
+          #makeBullet(100, bean, current_level)
+
+
+
+
+        #   while len(makeBullet(10, bean, current_level)) < max_bul:
+        #       print (len(makeBullet(10, bean, current_level)))
+        #   while  i <= len(current_level.bullet_list):
+        #         if now - lastshot > bean.delay:
+        #             for bul in current_level.bullet_list:
+        #                 bul.update()
+
+                    #i += 1
+
+                  #elif event.type == pygame.MOUSEBUTTONDOWN:
+
+                          #bullet_list = makeBullet(75, bean, current_level)
+                          #for bul in current_level.bullet_list:
+                           # bul.update()
+                            #print('Bullet Count: ' +str(bullet.count()))
+          for i in current_level.char_list:
+                i.coll(current_level.bullet_list)
+                scoretext = myfont.render("Health: "+str(current_level.player.health), 1, (BLACK))
+                if(stuf.health <= 0):
+                        for i in current_level.all_sprites_list:
+                            current_level.all_sprites_list.remove(i)
+                            current_level.bullet_list.remove(i)
+
+                        game_over = True
+
+          if game_over:
+                screen.blit(current_level.background, size)
+                read = myfont.render("GAME OVER! Try again!", 1, BLACK)
+                screen.blit(read, [600, 300])
+                pygame.display.update()
+
+
+
+
+
+
+
+
+
+                '''if bullet.rect.y > 400:
+                      bullet_list.remove(bullet)
+
+                for bul in current_level.bullet_list:
+                          if(pygame.sprite.collide_rect(bul, stuf)):
+                                  stuf.health -= bul.damage
+                                  print("Health:", stuf.health)
+                                  current_level.all_sprites_list.remove(bul)
+                                  current_level.bullet_list.remove(bul)
+                                  if(stuf.health <= 0):
+                                          current_level.all_sprites_list.remove(stuf)
+                                          print("you suck")
+                           if bullet.count() == len(bullet_list):
+                            print('Congratulations! You completed the level!')
+                            current_level_no += 1
+                            current_level = level_list[current_level_no]'''
+
+          #bean.update()
+          process(stuf)
+          current_level.all_sprites_list.update()
+          current_level.draw(screen, size)
+          screen.blit(scoretext, (100, 100))
+
+          pygame.display.update()
+
+          clock.tick(60)
+
+  pygame.quit()
+
+main()

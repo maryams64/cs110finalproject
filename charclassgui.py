@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 class char(pygame.sprite.Sprite):
     "This class is the box"
@@ -37,6 +38,10 @@ class char(pygame.sprite.Sprite):
 
     def getCoordinates(self):
         return([self.rect.x,self.rect.y])
+
+    def coll(self, gro):
+        if pygame.sprite.spritecollide(self, gro, True):
+            self.health -= random.randrange(1,11)
     
     def __str__(self):
         return('heip')

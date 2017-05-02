@@ -1,0 +1,38 @@
+import pygame
+import os
+import charclass
+
+class Level():
+  def __init__(self):
+    self.background = None
+    self.bullet_list = None
+    self.all_sprites_list = None
+    self.all_sprites_list = pygame.sprite.Group()
+    self.bullet_list = pygame.sprite.Group()
+    self.player = None
+    self.ai = None
+
+  def update(self):
+    self.all_sprites_list = pygame.sprite.Group()
+    self.bullet_list.update()
+
+  def draw(self, screen):
+    screen.fill(WHITE)
+    screen.blit(screen.image, screen.rect)
+
+    self.all_aprites_list.draw(screen)
+    self.bullet_list.draw(screen)
+
+class Level1(Level):
+  def __init__(self, char, ai, img):
+    Level()__init__(self, char, ai, img)
+    self.background = pygame.image.load(os.path.join('images', img)).convert()
+    self.player = char
+    self.ai = ai
+
+class Level2(Level):
+  def __init__(self):
+    Level()__init__(self)
+    self.background = pygame.image.load(os.path.join('images', 'arch.jpg')).convert()
+    self.player = pygame.image.load(os.path.join('images', 'moore.jpg')).convert
+    self.ai = pygame.image.load(os.path.join('images', 'bean.jpg')).convert()

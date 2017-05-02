@@ -1,13 +1,14 @@
 import pygame
+import os
 
 class char(pygame.sprite.Sprite):
     "This class is the box"
-    health = 100
-    def __init__(self, name, color):
+    def __init__(self, name, image):
         super().__init__()
         self.name = name
-        self.image = pygame.Surface([4,5])
-        self.image.fill(color)
+
+        self.image = pygame.image.load(os.path.join('images', image))
+        self.image = pygame.transform.scale(self.image, (50, 50))
 
         self.rect = self.image.get_rect()
         
@@ -17,9 +18,10 @@ class char(pygame.sprite.Sprite):
         self.lead_x_down = 0
         self.lead_y_up = 0
         self.lead_y_down = 0'''
-        self.sp = 10
+        self.sp = 2
         #pygame.draw.rect(gameDisplay, red, [self.lead_x,self.lead_y, 10,10])
-        
+
+
     def left(self):
         self.rect.x -= self.sp
 
