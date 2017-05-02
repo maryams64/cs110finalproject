@@ -65,6 +65,94 @@ def process(char):
 
 #print('Health: ' + str(stuf.health))
 
+def playagain(lvlist, lvnum):
+    pygame.init()
+
+    clock = pygame.time.Clock()
+
+
+    screen_x = 1200
+    screen_y = 600
+
+    size = (screen_x, screen_y)
+    screen = pygame.display.set_mode(size)
+
+    pygame.display.update()
+
+    '''all_sprites_list = pygame.sprite.Group()
+    bullet_list = pygame.sprite.Group()'''
+
+    myfont = pygame.font.SysFont('Arial Black', 16)
+
+    stuf = charclassgui.char('moore', 'moore.png')
+    bean = aiclass.combatAi('bean.png')
+    test = aiclass.combatAi('basketball.png')
+
+
+    level_list = lvlist
+    #pls = levels.Level1(stuf, bean, 'patio.jpg')
+    #level_list.append(pls)
+
+    #level_list.append(levels.Level2(stuf, test, 'arch.jpg'))
+
+    level_list[lvnum].all_sprites_list.add(stuf)
+    level_list[lvnum].char_list.add(stuf)
+    level_list[lvnum].all_sprites_list.add(bean)
+    level_list[lvnum+1].all_sprites_list.add(test)
+    level_list[lvnum+1].char_list.add(stuf)
+
+    current_level_no = lvnum
+    current_level = level_list[current_level_no]
+
+    done = False
+    game_over = False
+    delay = 250
+
+    max_bul = 100
+    count = 0
+
+
+    while not done:
+            now = pygame.time.get_ticks()
+            for event in pygame.event.get():
+                  keys = pygame.key.get_pressed()
+                  if event.type == pygame.QUIT:
+                            done = True
+            while count < max_bul:
+                var = bulletclass2.Bullet(bean,RED)
+                current_level.all_sprites_list.add(var)
+                current_level.bullet_list.add(var)
+                count += 1
+                current_level.bullet_list.update()
+
+
+            for i in current_level.char_list:
+                  i.coll(current_level.bullet_list)
+                  scoretext = myfont.render("Health: "+str(stuf.health), 1, (BLACK))
+                  if(stuf.health <= 0):
+                          current_level.all_sprites_list.remove(stuf)
+                          current_level_no += 1
+                          current_level = level_list[current_level_no]
+                          game_over = True
+
+            if game_over:
+                  read = myfont.render("GAME OVER", 1, BLACK)
+                  for i in current_level.all_sprites_list:
+                      current_level.all_sprites_list.remove(i)
+                      playagain(level_list, current_level_no)
+                  screen.blit(read, [(screen_x/2), (screen_y/2)])
+
+            process(stuf)
+            current_level.all_sprites_list.update()
+            current_level.draw(screen, size)
+            screen.blit(scoretext, (100, 100))
+
+            pygame.display.flip()
+
+            clock.tick(60)
+
+    pygame.quit()
+
 def main():
   pygame.init()
 
@@ -150,12 +238,20 @@ def main():
           for i in current_level.char_list:
                 i.coll(current_level.bullet_list)
                 scoretext = myfont.render("Health: "+str(stuf.health), 1, (BLACK))
-                print("Health:", stuf.health)
                 if(stuf.health <= 0):
                         current_level.all_sprites_list.remove(stuf)
+                        current_level_no += 1
+                        current_level = level_list[current_level_no]
                         game_over = True
-                        if game_over:
-                            read = myfont.render("GAME OVER", 1, BLACK)
+
+          if game_over:
+                read = myfont.render("GAME OVER", 1, BLACK)
+                for i in current_level.all_sprites_list:
+                    current_level.all_sprites_list.remove(i)
+                    playagain(level_list, current_level_no)
+                screen.blit(read, [(screen_x/2), (screen_y/2)])
+
+
 
 
 
@@ -185,7 +281,7 @@ def main():
           current_level.all_sprites_list.update()
           current_level.draw(screen, size)
           screen.blit(scoretext, (100, 100))
-          #screen.blit(read, [(screen_x/2), -(screen_y/2)])
+
           pygame.display.flip()
 
           clock.tick(60)
