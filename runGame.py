@@ -84,6 +84,8 @@ for i in range(2):
   background = getBackground(level)
   totalBulletCount = 0
   tickNum = 0
+  if(level > 1):
+    all_sprites_list.remove(villain)
   villain = ai.combatAi(level)
   all_sprites_list.add(villain)
 
@@ -100,6 +102,7 @@ for i in range(2):
             background = getBackground(level)
             totalBulletCount = 0
             tickNum = 0
+            all_sprites_list.remove(villain)
             villain = ai.combatAi(level)
             all_sprites_list.add(villain)
             player.health = 100
@@ -148,3 +151,5 @@ for i in range(2):
     pygame.display.flip()
 
 pygame.quit()
+
+
