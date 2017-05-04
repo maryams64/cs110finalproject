@@ -3,9 +3,7 @@ import math
 import random
 
 class Bullet(pygame.sprite.Sprite):
-
-    randMoveX = random.random() * 8 - 4
-    randMoveY = random.random() * 8 - 4
+    
     damage = 1
     xU = 0
     yU = 0
@@ -38,7 +36,8 @@ class Bullet(pygame.sprite.Sprite):
         self.yU = userY
         self.originx = ai.rect.x
         self.originy = ai.rect.y
-        
+        self.randMoveX = random.random() * 8 - 4
+        self.randMoveY = random.random() * 8 - 4
         super().__init__()
         
         self.image = pygame.Surface([4,5])

@@ -147,6 +147,18 @@ for i in range(2):
     score += level
     pygame.display.flip()
 
+if(player.health > 0 and level == 2):
+  while(not wantToLeave):
+    for event in pygame.event.get():
+        keys = pygame.key.get_pressed()
+        if event.type == pygame.QUIT:
+          wantToLeave = True
+        
+    if(player.health > 0 and level == 2):
+      win = font.render("You Won!", 1, (BLACK))                                    
+      screen.blit(win, (600, 50))
+      pygame.display.flip()
+
 pygame.quit()
 
 
