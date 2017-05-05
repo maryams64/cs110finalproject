@@ -6,7 +6,7 @@ import random
 import sys
 import os
 
-txt1 = 'It was a normal day at Binghamton University for Professor Steven Moore'  +'\n(Press Space to continue)'
+txt1 = 'It was a normal day at Binghamton University for Professor Steven Moore'  +'  (Press Space to continue)'
 txt2 = 'Or so he thought . . .'
 txt3 = 'As he made his way across campus, he noticed it was eerily quiet.'
 txt4 = 'He wondered where the students were. The only thing of interest was a strange chanting in the background.'
@@ -17,7 +17,7 @@ txt8 = 'THERE WON"T BE ANY FINALS IF WE SUMMON THE ALIENS!!!'
 txt9 = "It was with a heavy heart that Professor Moore knew what he had to do: send them to the dean's office."
 txt10 = 'But they scrambled and before he knew it, one was on top of the arch by the marketplace and throwing . . . colored blocks at him!?'
 txt11 = 'The banana-haired boy screamed: "You"ll never get me! The aliens are coming!'
-txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar to begin!'
+txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar twice to begin!'
 storyList = []
 storyList.append(txt1)
 storyList.append(txt2)
@@ -32,24 +32,17 @@ storyList.append(txt10)
 storyList.append(txt11)
 storyList.append(txt12)
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-GREEN = (0, 128, 0)
-PURPLE = (128, 0, 128)
-BROWN = (160, 82, 45)
+
 totalBulletCount = 0
 tickNum = 0
 level = 0
 score = 0
 space = False
-wait = 0
 
-easyColorList = [BLUE, BLUE, BLUE, BLUE, RED, RED, RED, GREEN, GREEN, PURPLE, BLACK, BROWN]
-harderColorList = [BLUE, RED, RED, GREEN, PURPLE, PURPLE, PURPLE, BLACK, BLACK, BROWN]
-veryHardColorList = [BLUE, RED, GREEN, PURPLE, PURPLE, BLACK, BLACK, BLACK, BROWN]
-hardestColorList = [BLACK, BROWN, BROWN, BROWN, BROWN]
+easyColorList = [(0, 0, 225), (0, 0, 225), (0, 0, 225), (0, 0, 225), (225, 0, 0), (225, 0, 0), (225, 0, 0), (0, 128, 0), (0, 128, 0), (128, 0, 128), (0, 0, 0), (160, 82, 45)]
+harderColorList = [(0, 0, 225), (225, 0, 0), (225, 0, 0), (0, 128, 0), (128, 0, 128), (128, 0, 128), (128, 0, 128), (0, 0, 0), (0, 0, 0), (160, 82, 45)]
+veryHardColorList = [(0, 0, 225), (225, 0, 0), (0, 128, 0), (128, 0, 128), (128, 0, 128), (0, 0, 0), (0, 0, 0), (0, 0, 0), (160, 82, 45)]
+hardestColorList = [(0, 0, 0), (160, 82, 45), (160, 82, 45), (160, 82, 45), (160, 82, 45)]
 
 
 pygame.init()
@@ -62,6 +55,7 @@ all_sprites_list = pygame.sprite.Group()
 bullet_list = pygame.sprite.Group()
 player = charGui.char('moore', 'moore.png')
 all_sprites_list.add(player)
+
 gameOver = False
 wantToLeave = False
 
@@ -108,20 +102,20 @@ font = pygame.font.SysFont('Arial Black', 16)
 
 for i in range(12):
   space = False
-  story = font.render(storyList[i], 1, (WHITE))
+  story = font.render(storyList[i], 1, ((255, 255, 255)))
   while(not space):
       screen.blit(story, (20, 200))
       pygame.display.flip()
       for event in pygame.event.get():
           keys = pygame.key.get_pressed()
           if(keys[pygame.K_SPACE]):
-            screen.fill(BLACK)
+            screen.fill((0, 0, 0))
             pygame.display.flip()
             space = True
 
 for i in range(2):
   level = i + 1
-  lvlPrnt = font.render("Level " + str(level), 1, BLACK)
+  lvlPrnt = font.render("Level " + str(level), 1, (0, 0, 0))
   background = getBackground(level)
   totalBulletCount = 0
   tickNum = 0
@@ -130,7 +124,7 @@ for i in range(2):
   villain = ai.combatAi(level)
   all_sprites_list.add(villain)
 
-  while totalBulletCount < 101 and not wantToLeave or len(bullet_list) > 0:
+  while totalBulletCount < 101 and not wantToLeave:
     if(gameOver and not wantToLeave):
         while(gameOver and not wantToLeave):
         #save score
@@ -139,7 +133,7 @@ for i in range(2):
           if(keys[pygame.K_SPACE] and gameOver):
             gameOver = False
             level = 1
-            lvlPrnt = font.render("Level " + str(level), 1, BLACK)
+            lvlPrnt = font.render("Level " + str(level), 1, (0, 0, 0))
             background = getBackground(level)
             totalBulletCount = 0
             tickNum = 0
@@ -152,7 +146,7 @@ for i in range(2):
           elif event.type == pygame.QUIT:
             wantToLeave = True
 
-          message = font.render("GAME OVER. Press spacebar to try again...", 1, BLACK)
+          message = font.render("GAME OVER. Press spacebar to try again...", 1, (0, 0, 0))
           screen.blit(message, (400, 300))
           pygame.display.flip()
 
@@ -163,7 +157,7 @@ for i in range(2):
         wantToLeave = True
         gameOver = True
 
-    if(tickNum % 12 == 0 and totalBulletCount < 101):
+    if(tickNum % 12 == 0):
       bul = makeBullet(totalBulletCount)
       totalBulletCount += 1
       bullet_list.add(bul)
@@ -176,15 +170,12 @@ for i in range(2):
         bullet_list.remove(bul)
         if(player.health <= 0):
           gameOver = True
-      elif(bul.rect.y > 700):
-        all_sprites_list.remove(bul)
-        bullet_list.remove(bul)
 
-    scoretext = font.render("Health: "+str(player.health), 1, (BLACK))
+    scoretext = font.render("Health: "+str(player.health), 1, ((0, 0, 0)))
     screen.blit(background, (0, 0))
     screen.blit(scoretext, (100, 150))
     screen.blit(lvlPrnt, (100, 100))
-    scrPrnt = font.render("Score: " + str(score), 1, BLACK)
+    scrPrnt = font.render("Score: " + str(score), 1, (0, 0, 0))
     screen.blit(scrPrnt, (100, 200))
     move(player)
     all_sprites_list.update()
@@ -193,10 +184,9 @@ for i in range(2):
     tickNum += level
     score += level
     pygame.display.flip()
-
 if(not wantToLeave and level == 2):
   while(not wantToLeave):
-        win = font.render("You Won!", 1, (BLACK))
+        win = font.render("You Won!", 1, (0,0,0))
         screen.blit(win, (300, 100))
         pygame.display.flip()
         for event in pygame.event.get():
@@ -205,6 +195,5 @@ if(not wantToLeave and level == 2):
             wantToLeave = True
             gameOver = True
 
+
 pygame.quit()
-
-
