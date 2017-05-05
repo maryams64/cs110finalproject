@@ -5,34 +5,19 @@ import ai
 import random
 import sys
 import os
-
-txt1 = 'It was a normal day at Binghamton University for Professor Steven Moore'  +'  (Press Space to continue)'
-txt2 = 'Or so he thought . . .'
-txt3 = 'As he made his way across campus, he noticed it was eerily quiet.'
-txt4 = 'He wondered where the students were. The only thing of interest was a strange chanting in the background.'
-txt5 = 'And they say curiosity killed the cat because our dear professor began to make his way towards the chanting.'
-txt6 = 'He was shocked to find two of his CS 110 students holding each other"s arms as they chanted.'
-txt7 = 'They noticed him and when he asked what they were doing they screamed:'
-txt8 = 'THERE WON"T BE ANY FINALS IF WE SUMMON THE ALIENS!!!'
-txt9 = "It was with a heavy heart that Professor Moore knew what he had to do: send them to the dean's office."
-txt10 = 'But they scrambled and before he knew it, one was on top of the arch by the marketplace and throwing . . . colored blocks at him!?'
-txt11 = 'The banana-haired boy screamed: "You"ll never get me! The aliens are coming!'
-txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar twice to begin!'
-storyList = []
-storyList.append(txt1)
-storyList.append(txt2)
-storyList.append(txt3)
-storyList.append(txt4)
-storyList.append(txt5)
-storyList.append(txt6)
-storyList.append(txt7)
-storyList.append(txt8)
-storyList.append(txt9)
-storyList.append(txt10)
-storyList.append(txt11)
-storyList.append(txt12)
+import json
 
 
+def story(file):
+    with open(file) as data_file:
+        data = json.load(data_file)
+    storyList = []
+    for i in data:
+        storyList.append(data[i])
+    return storyList
+
+
+storyList = story('story.json')
 totalBulletCount = 0
 tickNum = 0
 level = 0
