@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 class combatAi(pygame.sprite.Sprite):
     def __init__(self, level):
@@ -17,7 +18,7 @@ class combatAi(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-        self.rect.x = 350
+        self.rect.x = random.randint(200,1000)
         self.rect.y = 0
 
     def getCoordinates(self):
