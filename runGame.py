@@ -17,7 +17,7 @@ txt8 = 'THERE WON"T BE ANY FINALS IF WE SUMMON THE ALIENS!!!'
 txt9 = "It was with a heavy heart that Professor Moore knew what he had to do: send them to the dean's office."
 txt10 = 'But they scrambled and before he knew it, one was on top of the arch by the marketplace and throwing . . . colored blocks at him!?'
 txt11 = 'The banana-haired boy screamed: "You"ll never get me! The aliens are coming!'
-txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar twice to begin!'
+txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar to begin!'
 storyList = []
 storyList.append(txt1)
 storyList.append(txt2)
@@ -44,6 +44,7 @@ tickNum = 0
 level = 0
 score = 0
 space = False
+wait = 0
 
 easyColorList = [BLUE, BLUE, BLUE, BLUE, RED, RED, RED, GREEN, GREEN, PURPLE, BLACK, BROWN]
 harderColorList = [BLUE, RED, RED, GREEN, PURPLE, PURPLE, PURPLE, BLACK, BLACK, BROWN]
@@ -129,7 +130,7 @@ for i in range(2):
   villain = ai.combatAi(level)
   all_sprites_list.add(villain)
 
-  while totalBulletCount < 101 and not wantToLeave:
+  while totalBulletCount < 101 and not wantToLeave or len(bullet_list) > 0:
     if(gameOver and not wantToLeave):
         while(gameOver and not wantToLeave):
         #save score
@@ -162,7 +163,7 @@ for i in range(2):
         wantToLeave = True
         gameOver = True
 
-    if(tickNum % 12 == 0):
+    if(tickNum % 12 == 0 and totalBulletCount < 101):
       bul = makeBullet(totalBulletCount)
       totalBulletCount += 1
       bullet_list.add(bul)
@@ -175,6 +176,9 @@ for i in range(2):
         bullet_list.remove(bul)
         if(player.health <= 0):
           gameOver = True
+      elif(bul.rect.y > 700):
+        all_sprites_list.remove(bul)
+        bullet_list.remove(bul)
 
     scoretext = font.render("Health: "+str(player.health), 1, (BLACK))
     screen.blit(background, (0, 0))
@@ -189,6 +193,17 @@ for i in range(2):
     tickNum += level
     score += level
     pygame.display.flip()
+
+if(not wantToLeave and level == 2):
+  while(not wantToLeave):
+        win = font.render("You Won!", 1, (BLACK))
+        screen.blit(win, (300, 100))
+        pygame.display.flip()
+        for event in pygame.event.get():
+          keys = pygame.key.get_pressed()
+          if event.type == pygame.QUIT:
+            wantToLeave = True
+            gameOver = True
 
 pygame.quit()
 
