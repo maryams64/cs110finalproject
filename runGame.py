@@ -17,7 +17,7 @@ txt8 = 'THERE WON"T BE ANY FINALS IF WE SUMMON THE ALIENS!!!'
 txt9 = "It was with a heavy heart that Professor Moore knew what he had to do: send them to the dean's office."
 txt10 = 'But they scrambled and before he knew it, one was on top of the arch by the marketplace and throwing . . . colored blocks at him!?'
 txt11 = 'The banana-haired boy screamed: "You"ll never get me! The aliens are coming!'
-txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar to begin!'
+txt12 = 'Press the arrow keys to move! Dodge the first 100 blocks to go to the next level! Press the spacebar twice to begin!'
 storyList = []
 storyList.append(txt1)
 storyList.append(txt2)
